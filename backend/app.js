@@ -25,6 +25,9 @@ app.use(
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
+      } else if (origin && origin.includes('vercel.app')) {
+        // Allow dynamic Vercel preview deployments
+        callback(null, true);
       } else {
         callback(new Error(`Not allowed by CORS: ${origin}`));
       }
