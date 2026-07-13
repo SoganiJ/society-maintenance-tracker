@@ -34,14 +34,19 @@ const sendEmail = async ({ to, subject, html }) => {
   }
 
   try {
-    await mailer.sendMail({
+    console.log(`[DEBUG] Attempting to send email to ${to} with subject: "${subject}"...`);
+    console.log(`[DEBUG] Using SMTP_USER: ${process.env.SMTP_USER}, EMAIL_FROM: ${process.env.EMAIL_FROM}`);
+    
+    const info = await mailer.sendMail({
       from: process.env.EMAIL_FROM || '"Society Maintenance" <noreply@society.com>',
       to,
       subject,
       html,
     });
+    
+    console.log(`[DEBUG] Email successfully sent to ${to}! Message ID: ${info.messageId}`);
   } catch (error) {
-    console.error(`Email send failed to ${to}: ${error.message}`);
+    console.error(`Email send failed to ${to}:`, error);
   }
 };
 
