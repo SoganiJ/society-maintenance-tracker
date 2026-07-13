@@ -17,14 +17,16 @@ const app = express();
 app.use(helmet());
 
 // --- CORS: only the deployed frontend (and local dev) may call this API ---
-const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173'];
+const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : '';
+const allowedOrigins = [clientUrl, 'http://localhost:5173', 'http://127.0.0.1:5173'];
+
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error(`Not allowed by CORS: ${origin}`));
       }
     },
     credentials: true,
