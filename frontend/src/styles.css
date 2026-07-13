@@ -1,0 +1,1419 @@
+/* ==========================================================================
+   SOCIETY MAINTENANCE TRACKER — DESIGN SYSTEM
+   Single stylesheet. All components consume these tokens and utility
+   classes — no per-component CSS files, no framework.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Base neutrals (light) */
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e6e6e9;
+  --border-strong: #d4d4d9;
+  --text-primary: #17171a;
+  --text-secondary: #5b5b63;
+  --text-muted: #8b8b93;
+
+  /* Signal accent — restrained amber, not neon */
+  --accent: #b8722e;
+  --accent-hover: #a2621f;
+  --accent-soft: #fbeee0;
+  --accent-contrast: #ffffff;
+
+  /* Status semaphore — the recurring motif across cards/badges */
+  --status-open: #3b6fd6;
+  --status-open-soft: #e8f0fd;
+  --status-progress: #b8722e;
+  --status-progress-soft: #fbeee0;
+  --status-resolved: #2f9e5c;
+  --status-resolved-soft: #e6f6ec;
+  --status-closed: #6b6b73;
+  --status-closed-soft: #eeeeef;
+  --status-overdue: #d1433f;
+  --status-overdue-soft: #fbe9e8;
+
+  /* Priority */
+  --priority-low: #6b6b73;
+  --priority-medium: #3b6fd6;
+  --priority-high: #b8722e;
+  --priority-urgent: #d1433f;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(23, 23, 26, 0.04), 0 1px 1px rgba(23, 23, 26, 0.03);
+  --shadow-md: 0 4px 12px rgba(23, 23, 26, 0.06), 0 1px 3px rgba(23, 23, 26, 0.04);
+  --shadow-lg: 0 12px 32px rgba(23, 23, 26, 0.10), 0 2px 6px rgba(23, 23, 26, 0.05);
+
+  /* Neumorphic button shadow pair (light) */
+  --neu-light: rgba(255, 255, 255, 0.7);
+  --neu-dark: rgba(23, 23, 26, 0.08);
+
+  /* Radius scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Type */
+  --font-display: 'Manrope', 'Segoe UI', sans-serif;
+  --font-body:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+
+  --sidebar-width: 248px;
+  --navbar-height: 64px;
+}
+
+[data-theme='dark'] {
+  --bg: #0d0f12;
+  --surface: #151719;
+  --surface-raised: #1a1d20;
+  --border: #262a2e;
+  --border-strong: #34383d;
+  --text-primary: #f2f2f3;
+  --text-secondary: #a8a8b0;
+  --text-muted: #6f6f77;
+
+  --accent: #d78f47;
+  --accent-hover: #e29c54;
+  --accent-soft: #2c2216;
+  --accent-contrast: #17171a;
+
+  --status-open: #6a9bf4;
+  --status-open-soft: #182640;
+  --status-progress: #d78f47;
+  --status-progress-soft: #2c2216;
+  --status-resolved: #52c284;
+  --status-resolved-soft: #163024;
+  --status-closed: #9a9aa2;
+  --status-closed-soft: #232326;
+  --status-overdue: #ea6a65;
+  --status-overdue-soft: #331c1b;
+
+  --priority-low: #9a9aa2;
+  --priority-medium: #6a9bf4;
+  --priority-high: #d78f47;
+  --priority-urgent: #ea6a65;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
+
+  --neu-light: rgba(255, 255, 255, 0.03);
+  --neu-dark: rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: light dark;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background var(--duration-base) var(--ease), color var(--duration-base) var(--ease);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+h2 {
+  font-size: 1.375rem;
+}
+h3 {
+  font-size: 1.125rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Visible keyboard focus everywhere — never remove outlines without replacing them */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. LAYOUT PRIMITIVES
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  padding: var(--space-6);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.gap-1 {
+  gap: var(--space-1);
+}
+.gap-2 {
+  gap: var(--space-2);
+}
+.gap-3 {
+  gap: var(--space-3);
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-5 {
+  gap: var(--space-5);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   4. BUTTONS — neumorphism-inspired, no glow
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 18px;
+  cursor: pointer;
+  box-shadow:
+    -3px -3px 6px var(--neu-light),
+    3px 3px 8px var(--neu-dark);
+  transition:
+    transform var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    -2px -2px 5px var(--neu-light),
+    2px 2px 6px var(--neu-dark);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: inset 2px 2px 5px var(--neu-dark), inset -2px -2px 5px var(--neu-light);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-raised);
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-danger {
+  background: var(--status-overdue);
+  border-color: var(--status-overdue);
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-icon {
+  padding: 10px;
+  border-radius: var(--radius-full);
+}
+
+/* --------------------------------------------------------------------------
+   5. CARDS — premium, signal-bar motif
+   -------------------------------------------------------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+  transition:
+    box-shadow var(--duration-base) var(--ease),
+    transform var(--duration-base) var(--ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* The signature motif: a colored left edge that encodes status/priority,
+   reused on complaint cards, notice cards, and dashboard stat cards. */
+.card-signal {
+  position: relative;
+  padding-left: calc(var(--space-5) + 4px);
+  border-left: 4px solid var(--border-strong);
+}
+
+.card-signal.status-open {
+  border-left-color: var(--status-open);
+}
+.card-signal.status-in_progress {
+  border-left-color: var(--status-progress);
+}
+.card-signal.status-resolved {
+  border-left-color: var(--status-resolved);
+}
+.card-signal.status-closed {
+  border-left-color: var(--status-closed);
+}
+.card-signal.status-overdue {
+  border-left-color: var(--status-overdue);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.stat-card .stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   6. BADGES
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-open {
+  background: var(--status-open-soft);
+  color: var(--status-open);
+}
+.badge-in_progress {
+  background: var(--status-progress-soft);
+  color: var(--status-progress);
+}
+.badge-resolved {
+  background: var(--status-resolved-soft);
+  color: var(--status-resolved);
+}
+.badge-closed {
+  background: var(--status-closed-soft);
+  color: var(--status-closed);
+}
+.badge-overdue {
+  background: var(--status-overdue-soft);
+  color: var(--status-overdue);
+}
+
+.badge-priority-low {
+  color: var(--priority-low);
+}
+.badge-priority-medium {
+  color: var(--priority-medium);
+}
+.badge-priority-high {
+  color: var(--priority-high);
+}
+.badge-priority-urgent {
+  color: var(--priority-urgent);
+}
+
+/* --------------------------------------------------------------------------
+   7. FORMS
+   -------------------------------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.input,
+.textarea,
+.select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.field-error {
+  font-size: 0.8125rem;
+  color: var(--status-overdue);
+}
+
+/* --------------------------------------------------------------------------
+   8. WIFI LOADER — signature loading motif, used for all async states
+   -------------------------------------------------------------------------- */
+.wifi-loader {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wifi-loader .wifi-bars {
+  position: relative;
+  width: 64px;
+  height: 48px;
+}
+
+.wifi-loader .wifi-dot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  transform: translateX(-50%);
+}
+
+.wifi-loader .wifi-arc {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  border: 4px solid var(--border-strong);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0.25;
+  animation: wifi-pulse 1.4s ease-in-out infinite;
+}
+
+.wifi-loader .wifi-arc-1 {
+  width: 22px;
+  height: 22px;
+  animation-delay: 0s;
+}
+.wifi-loader .wifi-arc-2 {
+  width: 40px;
+  height: 40px;
+  animation-delay: 0.2s;
+}
+.wifi-loader .wifi-arc-3 {
+  width: 58px;
+  height: 58px;
+  animation-delay: 0.4s;
+}
+
+.wifi-loader .wifi-arc,
+.wifi-loader .wifi-dot {
+  border-color: var(--accent);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.wifi-loader .wifi-dot {
+  border: none;
+  background: var(--accent);
+}
+
+@keyframes wifi-pulse {
+  0% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
+
+.wifi-loader .wifi-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* --------------------------------------------------------------------------
+   9. SKELETON LOADERS
+   -------------------------------------------------------------------------- */
+.skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--surface-raised) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. EMPTY STATES & TOASTS (base rules; extended per-feature in later steps)
+   -------------------------------------------------------------------------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-5);
+  color: var(--text-muted);
+}
+
+.toast {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   10b. SIDEBAR / NAVBAR RESPONSIVE SHELL
+   -------------------------------------------------------------------------- */
+.sidebar-toggle {
+  display: none;
+}
+
+.sidebar-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: inline-flex;
+  }
+
+  .sidebar-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform var(--duration-base) var(--ease);
+  }
+
+  .sidebar-wrap-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-wrap aside {
+    width: 240px;
+    height: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+  .content {
+    padding: var(--space-4);
+  }
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: var(--space-4);
+  }
+  .card {
+    padding: var(--space-4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. NOTICE CARD — type-based signal colours
+   -------------------------------------------------------------------------- */
+.notice-type-pinned {
+  border-left-color: var(--accent);
+}
+.notice-type-important {
+  border-left-color: var(--status-overdue);
+}
+.notice-type-general {
+  border-left-color: var(--text-muted);
+}
+
+.badge-notice-pinned {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.6875rem;
+}
+.badge-notice-pinned::before {
+  display: none;
+}
+
+.badge-notice-important {
+  background: var(--status-overdue-soft);
+  color: var(--status-overdue);
+}
+
+.badge-notice-general {
+  background: var(--status-closed-soft);
+  color: var(--status-closed);
+}
+
+/* --------------------------------------------------------------------------
+   13. DATA TABLE — responsive, clean, minimal
+   -------------------------------------------------------------------------- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 16px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+}
+
+.data-table tbody tr {
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.data-table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+/* --------------------------------------------------------------------------
+   14. MODAL / DIALOG
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--space-4);
+  animation: modal-fade-in var(--duration-base) var(--ease);
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  width: 100%;
+  animation: modal-slide-up var(--duration-base) var(--ease);
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  margin-bottom: var(--space-4);
+}
+
+.modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* --------------------------------------------------------------------------
+   15. TOAST NOTIFICATIONS
+   -------------------------------------------------------------------------- */
+.toast-container {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 360px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  animation: toast-slide-in var(--duration-base) var(--ease);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.toast-success .toast-icon {
+  background: var(--status-resolved-soft);
+  color: var(--status-resolved);
+}
+.toast-error .toast-icon {
+  background: var(--status-overdue-soft);
+  color: var(--status-overdue);
+}
+.toast-info .toast-icon {
+  background: var(--status-open-soft);
+  color: var(--status-open);
+}
+
+.toast-message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   16. PAGINATION
+   -------------------------------------------------------------------------- */
+.pagination-wrap {
+  padding-top: var(--space-3);
+}
+
+.pagination-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  border: 1px solid transparent;
+}
+
+.pagination-btn:hover {
+  background: var(--surface-raised);
+  box-shadow: none;
+  transform: none;
+}
+
+.pagination-active {
+  background: var(--accent) !important;
+  color: var(--accent-contrast) !important;
+  border-color: var(--accent) !important;
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 0.875rem;
+}
+
+/* --------------------------------------------------------------------------
+   17. TOGGLE SWITCH (iOS-style)
+   -------------------------------------------------------------------------- */
+.toggle-label {
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease);
+  flex-shrink: 0;
+}
+
+.toggle-track.toggle-active {
+  background: var(--accent);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.toggle-active .toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* --------------------------------------------------------------------------
+   18. TAG INPUT — for managing categories
+   -------------------------------------------------------------------------- */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-radius: 50%;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.tag-remove:hover {
+  color: var(--status-overdue);
+}
+
+/* --------------------------------------------------------------------------
+   19. RESPONSIVE EXTENSIONS (Steps 10-11)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .toast-container {
+    top: var(--space-3);
+    right: var(--space-3);
+    left: var(--space-3);
+    max-width: 100%;
+  }
+
+  .modal-overlay {
+    padding: var(--space-3);
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    max-height: 85vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   20. AVATAR UPLOAD & NOTIFICATIONS (Steps 12-13)
+   -------------------------------------------------------------------------- */
+.avatar-upload:hover .avatar-overlay {
+  opacity: 1 !important;
+}
+
+.notification-unread {
+  background: var(--surface-raised);
+}
+.notification-unread:hover {
+  background: var(--accent-soft);
+}
+
+/* ==========================================================================
+   CUSTOM SVG LOADER (Replaces WifiLoader)
+   ========================================================================== */
+.custom-loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-spinner {
+ width: 3.25em;
+ transform-origin: center;
+ animation: rotate4 2s linear infinite;
+}
+
+.custom-spinner circle {
+ fill: none;
+ stroke: hsl(214, 97%, 59%);
+ stroke-width: 2;
+ stroke-dasharray: 1, 200;
+ stroke-dashoffset: 0;
+ stroke-linecap: round;
+ animation: dash4 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate4 {
+ 100% {
+  transform: rotate(360deg);
+ }
+}
+
+@keyframes dash4 {
+ 0% {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+ }
+
+ 50% {
+  stroke-dasharray: 90, 200;
+  stroke-dashoffset: -35px;
+ }
+
+ 100% {
+  stroke-dashoffset: -125px;
+ }
+}
+
+/* ==========================================================================
+   FLOATING NAVBAR (Replaces Sidebar)
+   ========================================================================== */
+.floating-nav-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.floating-nav-tabs {
+  display: flex;
+  position: relative;
+  background-color: var(--surface-raised);
+  box-shadow: var(--shadow-lg);
+  padding: 0.75rem;
+  border-radius: 99px;
+}
+
+.floating-nav-tabs * {
+  z-index: 2;
+}
+
+.floating-nav-container input[type="radio"] {
+  display: none;
+}
+
+.floating-nav-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 90px;
+  font-size: .8rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+  margin: 0;
+  text-decoration: none;
+}
+
+.floating-nav-notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
+  border-radius: 50%;
+  margin: 0px;
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  transition: 0.15s ease-in;
+}
+
+.floating-nav-container input[type="radio"]:checked + label {
+  color: var(--accent-contrast);
+}
+
+.floating-nav-container input[type="radio"]:checked + label > .floating-nav-notification {
+  background-color: var(--surface-raised);
+  color: var(--text-primary);
+}
+
+.floating-nav-glider {
+  position: absolute;
+  display: flex;
+  height: 30px;
+  width: 90px;
+  background-color: var(--accent);
+  z-index: 1;
+  border-radius: 99px;
+  transition: 0.25s ease-out;
+}
+
+@media (max-width: 700px) {
+  .floating-nav-tabs {
+    transform: scale(0.8);
+  }
+}
+
+/* Override app shell to not have sidebar space */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 100px !important;
+}
+
+/* ==========================================================================
+   CUSTOM LOGIN PAGE 
+   ========================================================================== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--surface);
+  padding: 30px;
+  width: 450px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
+}
+
+::placeholder {
+  font-family: var(--font-body);
+}
+
+.form button {
+  align-self: flex-end;
+}
+
+.flex-column > label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.inputForm {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  transition: 0.2s ease-in-out;
+  background-color: var(--bg);
+}
+
+.input-field {
+  margin-left: 10px;
+  border-radius: 10px;
+  border: none;
+  width: 85%;
+  height: 100%;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.input-field:focus {
+  outline: none;
+}
+
+.inputForm:focus-within {
+  border: 1.5px solid var(--accent);
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.flex-row > div > label {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.span {
+  font-size: 14px;
+  margin-left: 5px;
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button-submit {
+  margin: 20px 0 10px 0;
+  background-color: var(--accent);
+  border: none;
+  color: var(--accent-contrast);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+  height: 50px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button-submit:hover {
+  background-color: var(--accent-hover);
+}
+
+.p {
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.auth-bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.auth-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, var(--accent-soft) 0%, transparent 60%),
+              radial-gradient(circle at bottom left, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 40%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   AI LOADER
+   ========================================================================== */
+.ai-loader {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px;
+}
+
+.ai-loader-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  animation: ai-bounce 1s infinite;
+}
+
+.ai-loader-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.ai-loader-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.ai-loader-dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes ai-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
