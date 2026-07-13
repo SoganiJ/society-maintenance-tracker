@@ -19,7 +19,8 @@ const FloatingNav = () => {
     const fetchUnread = async () => {
       try {
         const res = await api.get('/notifications');
-        const unreadCount = res.data.notifications.filter(n => !n.isRead).length;
+        const notificationsList = res.data?.data?.notifications || [];
+        const unreadCount = notificationsList.filter(n => !n.isRead).length;
         setUnread(unreadCount);
       } catch (err) {
         console.error(err);
