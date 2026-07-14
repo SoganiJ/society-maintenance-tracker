@@ -2,6 +2,8 @@
 
 A comprehensive, modern full-stack web application designed for residential societies to effortlessly manage, track, and resolve maintenance complaints, backed by AI-powered tools.
 
+> 📖 **About & System Architecture**: Read the [System Design Document](system_design.md) for an in-depth architectural look at complaint tracking, overdue SLA enforcement, media handling, and the notification flow.
+
 ## 🚀 Key Features
 
 ### 👤 For Residents
