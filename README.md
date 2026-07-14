@@ -29,6 +29,12 @@ A comprehensive, modern full-stack web application designed for residential soci
   - **Groq API** (Llama3-8b) for the AI Resident Chatbot and Admin Summarization.
 - **File Storage**: Cloudinary for image hosting
 - **Email Delivery**: Nodemailer (SMTP)
+  > **Note regarding Email Delivery:** The email verification and delivery feature (using Nodemailer) has been fully implemented in the codebase. However, if you are testing a live deployed version on platforms like Render, the emails may fail to send. This is a known infrastructure issue because platforms like Render often block outbound SMTP ports on their free tiers to prevent spam. The email functionality works perfectly when the application is run locally.
+  > 
+  > **Alternatives / Fixes:**
+  > - **Upgrade Hosting Plan:** Upgrading to a paid tier on Render (or your chosen host) typically removes these outbound port restrictions.
+  > - **Alternative Hosting:** Deploy the backend on a VPS or platform that does not aggressively block SMTP ports (e.g., DigitalOcean, AWS EC2, or Railway).
+  > - **Third-Party Email APIs:** Instead of raw SMTP with Nodemailer, you can integrate dedicated email APIs like SendGrid, Resend, or Amazon SES, which operate over standard HTTP/HTTPS ports (80/443) and are not blocked by free-tier hosts.
 
 ---
 
