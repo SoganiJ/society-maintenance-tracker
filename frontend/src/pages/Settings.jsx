@@ -91,7 +91,7 @@ const Settings = () => {
   if (loading) return <WifiLoader overlay label="Loading settings…" />;
 
   return (
-    <div style={{ maxWidth: 680 }}>
+    <div className="page-centered-sm">
       <div style={{ marginBottom: 'var(--space-6)' }}>
         <h1>System Settings</h1>
         <p className="text-secondary">Configure global application settings</p>

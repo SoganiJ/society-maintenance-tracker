@@ -73,7 +73,7 @@ const RaiseComplaint = () => {
   }
 
   return (
-    <div style={{ maxWidth: 640 }}>
+    <div className="page-centered-sm">
       <h1 style={{ marginBottom: 'var(--space-5)' }}>Raise a complaint</h1>
 
       <form onSubmit={handleSubmit} className="card stack gap-1">

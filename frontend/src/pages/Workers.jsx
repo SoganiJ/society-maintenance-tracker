@@ -119,58 +119,44 @@ const Workers = () => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2" style={{ gap: 'var(--space-3)' }}>
+        <div className="grid grid-cols-3" style={{ gap: 'var(--space-3)' }}>
           {workers.map((w) => (
-            <div key={w._id} className="card" style={{ position: 'relative', padding: 'var(--space-4)' }}>
-              {/* Delete button */}
-              <button 
-                className="btn btn-icon btn-ghost" 
-                onClick={() => handleDelete(w._id)} 
-                title="Remove Worker"
-                style={{ position: 'absolute', top: '12px', right: '12px' }}
-              >
-                <FiTrash2 color="var(--status-overdue)" size={16} />
-              </button>
-
-              {/* Worker info */}
-              <div className="row gap-3" style={{ marginBottom: 'var(--space-3)' }}>
-                <div style={{
-                  width: 48, height: 48, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', fontWeight: 700, fontSize: '1.1rem', flexShrink: 0
-                }}>
-                  {w.name.charAt(0).toUpperCase()}
-                </div>
+            <div key={w._id} className="worker-card">
+              {/* Header: name + phone + delete */}
+              <div className="worker-card-header">
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1rem' }}>{w.name}</h3>
-                  <p className="text-secondary" style={{ margin: 0, fontSize: '0.85rem' }}>{w.phone}</p>
+                  <p className="worker-name">{w.name}</p>
+                  <a href={`tel:${w.phone}`} className="worker-phone">{w.phone}</a>
                 </div>
+                <button 
+                  className="worker-delete" 
+                  onClick={() => handleDelete(w._id)} 
+                  title="Remove Worker"
+                >
+                  <FiTrash2 size={15} />
+                </button>
               </div>
 
-              {/* Skills */}
-              {w.skills?.length > 0 && (
-                <div className="row gap-1" style={{ flexWrap: 'wrap', marginBottom: 'var(--space-3)' }}>
-                  <FiTool size={14} style={{ color: 'var(--text-muted)', marginRight: 4 }} />
-                  {w.skills.map((s, i) => (
-                    <span key={i} className="badge badge-info" style={{ fontSize: '0.75rem' }}>{s}</span>
-                  ))}
-                </div>
-              )}
+              {/* Main: skills + notes */}
+              <div className="worker-card-main">
+                {w.skills?.length > 0 && (
+                  <div className="worker-skills">
+                    <FiTool size={13} style={{ color: 'var(--text-muted)', marginRight: 4, flexShrink: 0 }} />
+                    {w.skills.map((s, i) => (
+                      <span key={i} className="worker-skill-tag">{s}</span>
+                    ))}
+                  </div>
+                )}
+                {w.notes && (
+                  <p className="worker-notes">{w.notes}</p>
+                )}
+              </div>
 
-              {/* Notes */}
-              {w.notes && (
-                <p className="text-secondary" style={{ fontSize: '0.8rem', marginBottom: 'var(--space-3)', fontStyle: 'italic' }}>
-                  {w.notes}
-                </p>
-              )}
-
-              {/* Action Buttons */}
-              <div className="row gap-2" style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--space-3)' }}>
+              {/* Footer: action buttons */}
+              <div className="worker-card-footer">
                 <a
                   href={`tel:${w.phone}`}
-                  className="btn btn-sm"
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: 'var(--surface)', border: '1px solid var(--border)' }}
+                  className="worker-action worker-action-call"
                 >
                   <FiPhone size={14} /> Call
                 </a>
@@ -178,8 +164,7 @@ const Workers = () => {
                   href={`https://wa.me/${w.phone.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn btn-sm"
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', backgroundColor: '#25D366', color: '#fff', border: 'none' }}
+                  className="worker-action worker-action-whatsapp"
                 >
                   <FiMessageCircle size={14} /> WhatsApp
                 </a>

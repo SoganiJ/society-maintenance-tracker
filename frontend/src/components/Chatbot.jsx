@@ -105,15 +105,18 @@ const Chatbot = () => {
     }
   };
 
+  const handleTagClick = (tag) => {
+    setInput(tag);
+  };
+
   if (!user) return null;
 
   return (
     <div className="chatbot-wrapper" style={{ position: 'fixed', bottom: '80px', right: '20px', zIndex: 9999 }}>
       {!isOpen && (
         <button 
-          className="btn btn-primary btn-icon" 
+          className="chatbot-fab" 
           onClick={() => setIsOpen(true)}
-          style={{ width: '56px', height: '56px', borderRadius: '50%', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -122,98 +125,111 @@ const Chatbot = () => {
       )}
 
       {isOpen && (
-        <div className="card" style={{ width: '350px', height: '500px', display: 'flex', flexDirection: 'column', padding: 0, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
-          {/* Header */}
-          <div className="row" style={{ padding: 'var(--space-3)', background: 'var(--accent)', color: 'white', justifyContent: 'space-between' }}>
-            <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'white' }}>AI Assistant</h3>
-            <button className="btn-ghost" onClick={() => setIsOpen(false)} style={{ color: 'white', border: 'none', background: 'transparent', cursor: 'pointer' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
+        <div className="chatbot-panel">
+          <div className="chatbot-inner">
+            {/* Header */}
+            <div className="chatbot-header">
+              <h3>✦ AI Assistant</h3>
+              <button className="chatbot-close" onClick={() => setIsOpen(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-          {/* Chat Body */}
-          <div style={{ flex: 1, padding: 'var(--space-3)', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', background: 'var(--bg)' }}>
-            {messages.map((msg, idx) => (
-              <div key={idx} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
-                <div style={{
-                  padding: '10px 14px',
-                  borderRadius: '16px',
-                  borderBottomRightRadius: msg.role === 'user' ? '2px' : '16px',
-                  borderBottomLeftRadius: msg.role === 'assistant' ? '2px' : '16px',
-                  background: msg.role === 'user' ? 'var(--accent)' : 'var(--surface)',
-                  color: msg.role === 'user' ? 'white' : 'var(--text-primary)',
-                  boxShadow: 'var(--shadow-sm)',
-                  fontSize: '0.9rem'
-                }}>
-                  {msg.content}
+            {/* Messages */}
+            <div className="chatbot-messages">
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`chatbot-msg chatbot-msg-${msg.role}`}>
+                  <div className="chatbot-bubble">
+                    {msg.content}
+                  </div>
+                  {msg.summary && (
+                    <button 
+                      onClick={() => handleRaiseComplaint(msg.summary)}
+                      className="chatbot-action-btn"
+                      disabled={loading}
+                    >
+                      🚨 Log Complaint: "{msg.summary}"
+                    </button>
+                  )}
                 </div>
-                {msg.summary && (
+              ))}
+              {loading && (
+                <div className="chatbot-typing">
+                  <div className="ai-loader">
+                    <div className="ai-loader-dot"></div>
+                    <div className="ai-loader-dot"></div>
+                    <div className="ai-loader-dot"></div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="chatbot-input-area">
+              <div className="chatbot-textarea-wrap">
+                <textarea
+                  className="chatbot-textarea"
+                  placeholder="Imagine Something...✦˚"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend(e);
+                    }
+                  }}
+                  disabled={loading}
+                />
+              </div>
+              <div className="chatbot-options">
+                <div className="chatbot-icon-btns">
+                  {/* Attachment icon */}
+                  <button type="button" title="Attach file">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                      <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8" />
+                    </svg>
+                  </button>
+                  {/* Template icon */}
+                  <button type="button" title="Templates">
+                    <svg viewBox="0 0 24 24" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm0 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm0-8h6m-3-3v6" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" fill="none" />
+                    </svg>
+                  </button>
+                </div>
+                {loading ? (
+                  <button type="button" onClick={handleStop} className="chatbot-stop">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
+                    </svg>
+                  </button>
+                ) : (
                   <button 
-                    onClick={() => handleRaiseComplaint(msg.summary)}
-                    className="btn btn-sm"
-                    disabled={loading}
-                    style={{ 
-                      marginTop: '8px', 
-                      fontSize: '0.8rem', 
-                      width: '100%', 
-                      background: '#e53e3e',
-                      color: '#fff',
-                      border: 'none',
-                      fontWeight: 600,
-                      padding: '10px 14px',
-                      borderRadius: '10px',
-                      cursor: 'pointer'
-                    }}
+                    type="button"
+                    onClick={handleSend} 
+                    className="chatbot-submit" 
+                    disabled={!input.trim()}
                   >
-                    🚨 Log Complaint: "{msg.summary}"
+                    <span className="chatbot-submit-inner">
+                      <svg viewBox="0 0 512 512" fill="currentColor">
+                        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
+                      </svg>
+                    </span>
                   </button>
                 )}
               </div>
-            ))}
-            {loading && (
-              <div style={{ alignSelf: 'flex-start', padding: '10px 14px', background: 'var(--surface)', borderRadius: '16px', borderBottomLeftRadius: '2px' }}>
-                <div className="ai-loader">
-                  <div className="ai-loader-dot"></div>
-                  <div className="ai-loader-dot"></div>
-                  <div className="ai-loader-dot"></div>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
+            </div>
           </div>
 
-          {/* Input Area */}
-          <form onSubmit={handleSend} style={{ padding: 'var(--space-2)', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
-            <div className="row gap-2">
-              <input 
-                type="text" 
-                className="input" 
-                style={{ flex: 1, borderRadius: '24px', padding: '10px 16px' }} 
-                placeholder="Type your issue..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                disabled={loading}
-              />
-              
-              {loading ? (
-                <button type="button" onClick={handleStop} className="btn btn-icon" style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0, backgroundColor: 'var(--status-overdue)', color: 'white' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
-                  </svg>
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-primary btn-icon" disabled={!input.trim()} style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
-                </button>
-              )}
-            </div>
-          </form>
+          {/* Tags */}
+          <div className="chatbot-tags">
+            <span onClick={() => handleTagClick('Report an issue')}>Report Issue</span>
+            <span onClick={() => handleTagClick('Check complaint status')}>Status Check</span>
+            <span onClick={() => handleTagClick('Help')}>Help</span>
+          </div>
         </div>
       )}
     </div>

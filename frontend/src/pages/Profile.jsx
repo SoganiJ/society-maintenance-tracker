@@ -97,7 +97,7 @@ const Profile = () => {
   };
 
   return (
-    <div style={{ maxWidth: 800 }}>
+    <div className="page-centered">
       <div style={{ marginBottom: 'var(--space-6)' }}>
         <h1>My Profile</h1>
         <p className="text-secondary">Manage your personal information and security settings</p>
