@@ -39,10 +39,18 @@ const complaintSchema = new mongoose.Schema(
       },
       default: [],
     },
+    statusWeight: {
+      type: Number,
+      default: 4,
+    },
     priority: {
       type: String,
       enum: Object.values(COMPLAINT_PRIORITY),
       default: COMPLAINT_PRIORITY.MEDIUM,
+    },
+    priorityWeight: {
+      type: Number,
+      default: 2,
     },
     status: {
       type: String,
@@ -81,6 +89,18 @@ const complaintSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+complaintSchema.pre('save', function (next) {
+  const weights = { low: 1, medium: 2, high: 3, urgent: 4 };
+  if (this.isModified('priority') || this.isNew) {
+    this.priorityWeight = weights[this.priority] || 2;
+  }
+  if (this.isModified('status') || this.isNew) {
+    const statusWeights = { open: 4, in_progress: 3, resolved: 2, closed: 1 };
+    this.statusWeight = statusWeights[this.status] || 1;
+  }
+  next();
+});
 
 // Dashboard/list queries filter by status and sort by recency constantly
 complaintSchema.index({ status: 1, createdAt: -1 });

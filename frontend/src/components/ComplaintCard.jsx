@@ -7,7 +7,9 @@ const ComplaintCard = ({ complaint }) => {
 
   return (
     <Link to={`/complaints/${complaint._id}`} style={{ display: 'block' }}>
-      <div className={`card card-signal card-interactive ${signalClass}`}>
+      <div 
+        className={`card card-signal card-interactive ${signalClass} ${complaint.priority === 'urgent' ? 'card-urgent' : ''}`}
+      >
         <div className="row" style={{ justifyContent: 'space-between', gap: 'var(--space-3)' }}>
           <div style={{ minWidth: 0 }}>
             <p style={{ fontWeight: 600, fontSize: '0.9375rem' }}>{complaint.title}</p>

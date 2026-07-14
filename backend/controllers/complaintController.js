@@ -88,10 +88,13 @@ exports.getComplaints = catchAsync(async (req, res) => {
 
   const skip = (page - 1) * limit;
 
-  // Surface overdue complaints to the top for admins if no explicit sort is given
+  // Enforce strict sorting for admins: Status (Open > In Progress > Resolved > Closed), then Priority (Urgent > High > Medium > Low)
+  // This applies regardless of the requested sort to guarantee the visual grouping.
   let finalSort = sort;
-  if (isAdmin(req.user) && sort === '-createdAt') {
-    finalSort = '-isOverdue -createdAt';
+  if (isAdmin(req.user)) {
+    finalSort = '-statusWeight -priorityWeight -isOverdue -createdAt';
+  } else if (sort === '-createdAt') {
+    finalSort = '-statusWeight -priorityWeight -createdAt';
   }
 
   const [complaints, total] = await Promise.all([

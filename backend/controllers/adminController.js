@@ -289,6 +289,13 @@ exports.getWorkers = catchAsync(async (req, res) => {
 });
 
 exports.createWorker = catchAsync(async (req, res) => {
+  const { phone } = req.body;
+  if (phone) {
+    const existingWorker = await Worker.findOne({ phone });
+    if (existingWorker) {
+      throw new ApiError(400, 'A worker with this phone number already exists.');
+    }
+  }
   const worker = await Worker.create(req.body);
   res.status(201).json({ success: true, data: worker });
 });
