@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
     "compression": "^1.7.4",
@@ -29,7 +30,6 @@
     "morgan": "^1.10.0",
     "multer": "^2.0.0",
     "node-cron": "^3.0.3",
-    "nodemailer": "^9.0.3",
     "resend": "^4.0.0"
   },
   "devDependencies": {

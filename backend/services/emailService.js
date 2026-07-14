@@ -1,52 +1,38 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
-let transporter = null;
-
-const getTransporter = () => {
-  if (
-    !process.env.SMTP_HOST ||
-    !process.env.SMTP_PORT ||
-    !process.env.SMTP_USER ||
-    !process.env.SMTP_PASS
-  ) {
-    return null;
+const setupSendGrid = () => {
+  if (!process.env.SENDGRID_API_KEY) {
+    return false;
   }
-
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_PORT == 465, // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-  }
-  return transporter;
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  return true;
 };
 
 const sendEmail = async ({ to, subject, html }) => {
-  const mailer = getTransporter();
-  if (!mailer) {
-    console.warn(`SMTP credentials not set — skipping email to ${to} ("${subject}")`);
+  if (!setupSendGrid()) {
+    console.warn(`SENDGRID_API_KEY not set — skipping email to ${to} ("${subject}")`);
     return;
   }
 
   try {
-    console.log(`[DEBUG] Attempting to send email to ${to} with subject: "${subject}"...`);
-    console.log(`[DEBUG] Using SMTP_USER: ${process.env.SMTP_USER}, EMAIL_FROM: ${process.env.EMAIL_FROM}`);
+    console.log(`[DEBUG] Attempting to send email to ${to} with subject: "${subject}" using SendGrid...`);
+    console.log(`[DEBUG] Using EMAIL_FROM: ${process.env.EMAIL_FROM}`);
     
-    const info = await mailer.sendMail({
-      from: process.env.EMAIL_FROM || '"Society Maintenance" <noreply@society.com>',
+    const msg = {
       to,
+      from: process.env.EMAIL_FROM || '"Society Maintenance" <noreply@society.com>',
       subject,
       html,
-    });
+    };
     
-    console.log(`[DEBUG] Email successfully sent to ${to}! Message ID: ${info.messageId}`);
+    const response = await sgMail.send(msg);
+    
+    console.log(`[DEBUG] Email successfully sent to ${to}! Status Code: ${response[0].statusCode}`);
   } catch (error) {
     console.error(`Email send failed to ${to}:`, error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
   }
 };
 
