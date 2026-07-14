@@ -173,7 +173,7 @@ const Chatbot = () => {
               <div className="chatbot-textarea-wrap">
                 <textarea
                   className="chatbot-textarea"
-                  placeholder="Imagine Something...✦˚"
+                  placeholder="Ask anything..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -187,18 +187,6 @@ const Chatbot = () => {
               </div>
               <div className="chatbot-options">
                 <div className="chatbot-icon-btns">
-                  {/* Attachment icon */}
-                  <button type="button" title="Attach file">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-                      <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8" />
-                    </svg>
-                  </button>
-                  {/* Template icon */}
-                  <button type="button" title="Templates">
-                    <svg viewBox="0 0 24 24" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm0 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm0-8h6m-3-3v6" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" fill="none" />
-                    </svg>
-                  </button>
                 </div>
                 {loading ? (
                   <button type="button" onClick={handleStop} className="chatbot-stop">
@@ -224,12 +212,6 @@ const Chatbot = () => {
             </div>
           </div>
 
-          {/* Tags */}
-          <div className="chatbot-tags">
-            <span onClick={() => handleTagClick('Report an issue')}>Report Issue</span>
-            <span onClick={() => handleTagClick('Check complaint status')}>Status Check</span>
-            <span onClick={() => handleTagClick('Help')}>Help</span>
-          </div>
         </div>
       )}
     </div>

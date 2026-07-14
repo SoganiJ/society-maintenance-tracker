@@ -1472,6 +1472,15 @@ ol {
   pointer-events: none;
 }
 
+[data-theme='dark'] .auth-bg {
+  background: var(--bg);
+}
+
+[data-theme='dark'] .auth-bg::before {
+  background: radial-gradient(circle at top right, rgba(224, 138, 74, 0.12) 0%, transparent 60%),
+              radial-gradient(circle at bottom left, rgba(28, 91, 99, 0.15) 0%, transparent 40%);
+}
+
 /* ==========================================================================
    AI LOADER
    ========================================================================== */
@@ -1606,7 +1615,7 @@ ol {
   color: var(--brand-contrast);
 }
 
-.chatbot-header h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+.chatbot-header h3 { margin: 0; font-size: 1rem; font-weight: 600; color: inherit; }
 
 [data-theme='dark'] .chatbot-header {
   border-bottom-color: rgba(255, 255, 255, 0.06);
